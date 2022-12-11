@@ -36,3 +36,10 @@ echo "1 2.0 - 4.1 5.2 + *" > test_case
 ./a.out < test_case
 rm -f ./test_case
 rm -f ./a.out
+
+echo ""
+
+echo "练习4-14.c:"
+gcc 练习4-14.c
+./a.out
+rm -f ./a.out
