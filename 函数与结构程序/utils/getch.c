@@ -15,6 +15,9 @@
 static char buf[BUFSIZE];
 static int bufp = 0;
 
+// 实际上getchar的返回值应该是 int (因为EOF是-1), 这里返回char不报错原因是char 是 signed (我的编译器认为是signed，换别人的可能就是unsigned)
+// https://blog.csdn.net/lonfee88/article/details/7542641
+// https://stackoverflow.com/questions/1437241/endoffile-in-c-eof
 char getch(void) {
   return (bufp > 0) ? buf[--bufp] : getchar();
 }
