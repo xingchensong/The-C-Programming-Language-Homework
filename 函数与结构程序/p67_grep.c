@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #define MAXLINE 1000
 
 int my_getline(char s[], int lim) {
@@ -26,13 +27,46 @@ int strindex(char source[], char searchfor[]) {
   return -1;
 }
 
+// https://www.zhihu.com/question/21923021/answer/1032665486
+int strindexKMP(char source[], char searchfor[]) {
+  // build next
+  int* next = (int *)malloc(sizeof(int) * strlen(searchfor));
+  next[0] = 0;
+  int p1, p2 = 1;  // assume p1 always == next[p2 - 1], 是为了方便递推
+  p1 = next[p2 - 1];
+  while (p2 < strlen(searchfor)) {
+    if (searchfor[p1] == searchfor[p2]) {
+      next[p2] = p1 + 1;
+      p1++; p2++;
+    } else if (p1 > 0) {
+      p1 = next[p1 - 1]; // 缩小范围
+    } else {
+      next[p2] = 0;
+      p1 = 0; p2++;
+    }
+  }
+  // search
+  int p_src = 0, p_search = next[p_src];
+  while (p_src < strlen(source)) {
+    if (source[p_src] == searchfor[p_search]) {
+      if (p_search == strlen(searchfor) - 1) return p_src;
+      p_src++; p_search++;
+    } else if (p_search > 0) {
+      p_search = next[p_search - 1];
+    } else {
+      p_src++; p_search = 0;
+    }
+  }
+  return -1;
+}
+
 char pattern[] = "OULD";
 
 int main () {
   char line[MAXLINE];
   int found = 0;
   while (my_getline(line, MAXLINE) > 0) {
-    int idx = strindex(line, pattern);
+    int idx = strindexKMP(line, pattern);
     if (idx >= 0) {
       printf("%s", line);
       for (int i = 0; i < strlen(line) - 1; ++i) {
