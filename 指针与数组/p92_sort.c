@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
   int numeric = 0;
   if (argc > 1 && strcmp(argv[1], "-n") == 0) numeric = 1;
   if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
-    // 这里对lineptr和numcmp都要做相应的指针类型转换
+    // 这里对lineptr和strcmp都要做相应的指针类型转换
     // (void**) 将 lineptr 从 char** 转换为 void**
     // (int (*)(void*, void*)) 将 strcmp 从 (int (*)(char*, char*)) 转换为 (int (*)(void*, void*))
     my_qsort((void**) lineptr, 0, nlines - 1, (numeric ? numcmp : (int (*)(void*, void*))strcmp));
